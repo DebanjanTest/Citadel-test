@@ -4,62 +4,76 @@ import { gsap } from 'gsap';
 
 const Hero: React.FC = () => {
   useEffect(() => {
-    const tl = gsap.timeline();
-    
-    tl.from(".hero-title", {
-      y: 150,
-      opacity: 0,
-      duration: 1.8,
-      ease: "power4.out"
-    })
-    .from(".hero-subtitle", {
-      y: 80,
-      opacity: 0,
-      duration: 1.4,
-      ease: "power3.out"
-    }, "-=1.2")
-    .from(".hero-btns", {
-      scale: 0.85,
-      opacity: 0,
-      duration: 1,
-      ease: "back.out(1.4)"
-    }, "-=0.8");
+    const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
+
+    // Animate Tech Lines first
+    tl.fromTo(".tech-line",
+      { scaleX: 0, opacity: 0 },
+      { scaleX: 1, opacity: 1, duration: 1.5, stagger: 0.2 }
+    );
+
+    // Text & Buttons Entrance
+    tl.fromTo(".hero-title",
+      { x: -100, opacity: 0 },
+      { x: 0, opacity: 1, duration: 1.2 },
+      "-=1.0"
+    )
+      .fromTo(".hero-subtitle",
+        { x: -50, opacity: 0 },
+        { x: 0, opacity: 1, duration: 1.0 },
+        "-=0.8"
+      )
+      .fromTo(".hero-btns",
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8 },
+        "-=0.6"
+      );
+
+    return () => { tl.kill(); };
   }, []);
 
   return (
-    <section className="relative min-h-screen flex flex-col justify-center items-center px-6 text-center md:px-24 pt-24 overflow-hidden">
-      <div className="z-20 space-y-10 max-w-7xl mx-auto">
-        <div className="overflow-hidden">
-          <h1 className="hero-title font-samarkan text-6xl sm:text-8xl md:text-9xl lg:text-[12rem] font-bold text-amber-500 gold-glow leading-[1] tracking-wider uppercase">
+    <section className="relative min-h-screen flex items-center px-6 md:px-16 pt-20 overflow-hidden">
+      {/* Decorative Tech Lines */}
+      <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-0">
+        <div className="absolute top-[20%] left-0 w-[40%] h-[1px] bg-gradient-to-r from-transparent via-amber-600 to-transparent tech-line origin-left opacity-30"></div>
+        <div className="absolute bottom-[20%] right-0 w-[50%] h-[1px] bg-gradient-to-l from-transparent via-amber-600 to-transparent tech-line origin-right opacity-30"></div>
+        {/* Angled lines */}
+        <svg className="absolute top-0 right-0 w-[40%] h-[40%] pointer-events-none opacity-20 tech-line">
+          <polyline points="0,0 100,0 150,50" fill="none" stroke="#fbbf24" strokeWidth="1" />
+          <circle cx="150" cy="50" r="2" fill="#fbbf24" />
+        </svg>
+      </div>
+
+      <div className="relative z-20 max-w-4xl">
+        <div className="overflow-hidden py-2">
+          {/* Metallic Gold Title Effect */}
+          <h1 className="hero-title font-samarkan text-7xl sm:text-9xl md:text-[10rem] lg:text-[11rem] leading-[0.9] tracking-wider uppercase text-transparent bg-clip-text bg-gradient-to-b from-[#fcd34d] via-[#f59e0b] to-[#78350f] drop-shadow-[0_2px_10px_rgba(245,158,11,0.5)]">
             citadel 1.0
           </h1>
         </div>
-        
-        <div className="overflow-hidden">
-          <p className="hero-subtitle font-pyriform text-xl sm:text-2xl md:text-4xl lg:text-5xl text-amber-100/70 tracking-[0.3em] uppercase">
-            — The Dharma of Code —
+
+        <div className="overflow-hidden mt-6 mb-12">
+          <p className="hero-subtitle font-pyriform text-2xl sm:text-3xl md:text-5xl text-amber-100/90 tracking-[0.2em] lowercase glow-text">
+            the dharma of code
           </p>
         </div>
-        
-        <div className="hero-btns flex flex-col sm:flex-row gap-8 pt-12 justify-center items-center">
-          <button className="relative group px-14 py-6 bg-amber-600 text-black font-pyriform font-bold text-2xl rounded-sm transition-all overflow-hidden shadow-[0_0_50px_rgba(217,119,6,0.5)] hover:scale-105 active:scale-95">
-            <span className="relative z-10">INITIATE ASCENSION</span>
-            <div className="absolute inset-0 bg-white translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500"></div>
+
+        <div className="hero-btns flex flex-col sm:flex-row gap-8 items-start">
+          {/* Primary Gold Button */}
+          <button className="relative px-10 py-4 bg-gradient-to-r from-amber-600 to-amber-700 text-black font-pyriform font-bold text-xl rounded-md transition-all shadow-[0_0_20px_rgba(217,119,6,0.4)] hover:shadow-[0_0_40px_rgba(217,119,6,0.6)] hover:scale-105 active:scale-95 uppercase tracking-wider border border-amber-400/50">
+            Register Now
           </button>
-          
-          <button className="px-14 py-6 border-2 border-amber-600/50 hover:border-amber-400 text-amber-400 font-pyriform font-bold text-2xl rounded-sm transition-all bg-black/50 backdrop-blur-xl hover:scale-105 active:scale-95">
-            DECODE VEDAS
+
+          {/* Secondary Outline Button */}
+          <button className="px-10 py-4 border border-amber-500/60 text-amber-400 font-pyriform font-bold text-xl rounded-md transition-all bg-black/40 backdrop-blur-sm hover:bg-amber-900/20 hover:border-amber-400 hover:text-amber-200 hover:scale-105 active:scale-95 uppercase tracking-wider">
+            View Vyuhas
           </button>
         </div>
-      </div>
-
-      <div className="absolute bottom-20 left-1/2 -translate-x-1/2 opacity-30 flex gap-6">
-        {[...Array(5)].map((_, i) => (
-          <div key={i} className="w-[2px] h-40 bg-gradient-to-b from-transparent via-amber-500 to-transparent"></div>
-        ))}
       </div>
     </section>
   );
 };
+
 
 export default Hero;

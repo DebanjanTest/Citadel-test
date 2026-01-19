@@ -30,7 +30,7 @@ const App: React.FC = () => {
   useEffect(() => {
     if (!loading && mainRef.current) {
       const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-      
+
       if (!isTouch) {
         const handleMouseMove = (e: MouseEvent) => {
           const { clientX, clientY } = e;
@@ -49,7 +49,7 @@ const App: React.FC = () => {
         window.addEventListener("mousemove", handleMouseMove);
         return () => window.removeEventListener("mousemove", handleMouseMove);
       }
-      
+
       gsap.fromTo(mainRef.current, { opacity: 0 }, { opacity: 1, duration: 2 });
     }
   }, [loading]);
@@ -62,13 +62,14 @@ const App: React.FC = () => {
     <div ref={mainRef} className="relative min-h-screen text-amber-50 selection:bg-amber-600 selection:text-white bg-[#050505] overflow-x-hidden">
       {/* Background layer always sits at the very bottom */}
       <Background />
-      
+
+      {/* Persistent Wheel sits between background and main content */}
+      <PersistentWheel />
+
       <div className="relative z-10 w-full">
-        {/* Persistent Wheel sits between background and main content */}
-        <PersistentWheel />
-        
+
         <Header />
-        
+
         <main className="relative z-20">
           <Hero />
           <About />
@@ -77,7 +78,7 @@ const App: React.FC = () => {
           <Prizes />
           <FAQ />
         </main>
-        
+
         <Footer />
       </div>
     </div>
