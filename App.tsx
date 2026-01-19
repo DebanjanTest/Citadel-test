@@ -4,6 +4,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Header from './components/Header.tsx';
 import Hero from './components/Hero.tsx';
+import HackathonIntro from './components/HackathonIntro.tsx';
 import About from './components/About.tsx';
 import ChakraLoader from './components/ChakraLoader.tsx';
 import Background from './components/Background.tsx';
@@ -72,6 +73,7 @@ const App: React.FC = () => {
 
         <main className="relative z-20">
           <Hero />
+          <HackathonIntro />
           <About />
           <VyuhaSection />
           <Timeline />

@@ -12,16 +12,16 @@ const Timeline: React.FC = () => {
 
     const arrows = arrowsRef.current.querySelectorAll('.astra-arrow');
     const sectionHeight = sectionRef.current.offsetHeight;
-    
+
     arrows.forEach((arrow, index) => {
-      const isLeftToRight = Math.random() > 0.4; 
+      const isLeftToRight = Math.random() > 0.4;
       const startX = isLeftToRight ? -600 : window.innerWidth + 600;
       const endX = isLeftToRight ? window.innerWidth + 600 : -600;
       const yStart = (index / arrows.length) * sectionHeight + (Math.random() - 0.5) * 400;
-      const yEnd = yStart + (Math.random() - 0.5) * 1000; 
+      const yEnd = yStart + (Math.random() - 0.5) * 1000;
       const angle = Math.atan2(yEnd - yStart, endX - startX) * (180 / Math.PI);
 
-      gsap.fromTo(arrow, 
+      gsap.fromTo(arrow,
         { x: startX, y: yStart, opacity: 0, rotation: angle, scale: 0.1 + (Math.random() * 1.5) },
         {
           scrollTrigger: {
@@ -51,11 +51,11 @@ const Timeline: React.FC = () => {
       <div ref={arrowsRef} className="absolute inset-0 pointer-events-none z-0">
         {[...Array(150)].map((_, i) => (
           <div key={i} className="astra-arrow absolute w-24 md:w-72 opacity-0 pointer-events-none">
-            <svg viewBox="0 0 200 40" fill="none" className="filter drop-shadow-[0_0_15px_rgba(251,191,36,0.5)]">
-              <path d="M0 20 L30 12 L24 20 L30 28 Z" fill="#451a03" />
-              <rect x="25" y="19" width="150" height="2" fill="#fbbf24" opacity="0.6" />
-              <path d="M175 12 L195 20 L175 28 Z" fill="#fbbf24" />
-            </svg>
+            <img
+              src="/Arrow.png"
+              alt="Arrow"
+              className="w-full h-auto filter drop-shadow-[0_0_15px_rgba(251,191,36,0.5)] transform rotate-180" // Rotate if needed to point forward
+            />
           </div>
         ))}
       </div>
@@ -80,7 +80,13 @@ const Timeline: React.FC = () => {
               </div>
               <div className="relative z-20 flex-shrink-0">
                 <div className="w-16 h-16 md:w-24 md:h-24 rounded-full border-4 border-amber-500 bg-black flex items-center justify-center shadow-[0_0_50px_rgba(251,191,36,0.3)]">
-                   <div className="w-6 h-6 md:w-10 md:h-10 bg-amber-500 rounded-full animate-pulse"></div>
+                  {/* Use Arrow.png instead of CSS arrow */}
+                  <img
+                    src="/Arrow.png"
+                    alt="Arrow"
+                    className={`w-8 h-8 md:w-12 md:h-12 object-contain transition-transform duration-500 ${i % 2 === 0 ? 'rotate-90 md:rotate-0' : '-rotate-90 md:rotate-180'
+                      }`}
+                  />
                 </div>
               </div>
               <div className="flex-1 hidden md:block"></div>

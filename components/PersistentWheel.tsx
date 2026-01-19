@@ -34,29 +34,29 @@ const PersistentWheel: React.FC = () => {
         trigger: "body",
         start: "top top",
         end: "bottom bottom",
-        scrub: 1.5, // Reduced scrub for more direct but smooth response
+        scrub: 1, // Adjusted for tighter response to scroll (faster feel)
       }
     });
 
     tl.to(wheelRef.current, {
-      top: "100vh",
-      left: "10%",
-      scale: 1.15,
-      opacity: 0.9,
-      rotationY: 30,
-      duration: 1
+      top: "120vh", // Move down to the intro section
+      left: "-12%", // Dock to left side, protruding
+      scale: 1.3, // Larger presence
+      opacity: 0.6, // Fade slightly as requested
+      rotationY: 45, // Angled view
+      duration: 1.5
     })
       .to(wheelRef.current, {
         top: "220vh",
-        left: "80%",
-        scale: 0.95,
-        opacity: 0.85,
-        rotationY: -30,
-        duration: 1
+        left: "-12%", // Stay docked on left
+        scale: 1.0,
+        opacity: 0.4,
+        rotationY: 20,
+        duration: 2
       })
       .to(wheelRef.current, {
         top: "350vh",
-        left: "40%",
+        left: "40%", // Return to center/interactive for later sections
         scale: 1.4,
         opacity: 0.75,
         rotationX: 45,
