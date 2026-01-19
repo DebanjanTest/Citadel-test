@@ -93,67 +93,81 @@ const PersistentWheel: React.FC = () => {
     class Particle {
       x: number;
       y: number;
-      size: number;
-      speedX: number;
-      speedY: number;
-      color: string;
+      angle: number;
+      speed: number;
+      length: number;
+      thickness: number;
       life: number;
       maxLife: number;
 
       constructor() {
-        // Emitting from the center/bottom of the wheel mostly
-        const angle = Math.random() * Math.PI * 2;
-        const radius = Math.random() * 80; // Spread within the wheel
-        this.x = canvas!.width / 2 + Math.cos(angle) * radius;
-        this.y = canvas!.height / 2 + Math.sin(angle) * radius;
+        this.reset(true); // true = start random distance to pre-fill
+      }
 
-        this.size = Math.random() * 12 + 5; // Larger flakes
-        this.speedX = (Math.random() * 2) - 1; // Slight horizontal drift
-        this.speedY = (Math.random() * -3) - 1; // Upward flow
+      reset(initial: boolean = false) {
+        const centerX = canvas!.width / 2;
+        const centerY = canvas!.height / 2;
+
+        this.angle = Math.random() * Math.PI * 2;
+        this.speed = Math.random() * 4 + 2; // Fast outward speed
+
+        // Random start distance: if initial, anywhere; else, center
+        const startDist = initial ? Math.random() * 300 : Math.random() * 50;
+
+        this.x = centerX + Math.cos(this.angle) * startDist;
+        this.y = centerY + Math.sin(this.angle) * startDist;
+
+        this.length = Math.random() * 20 + 5;
+        this.thickness = Math.random() * 2 + 0.5;
+
         this.life = 100;
         this.maxLife = 100;
-
-        // Fire palette: White (hot) -> Yellow -> Orange -> Red -> Smoke
-        // We'll define base color here but can modify in draw based on life
       }
 
       update() {
-        this.y += this.speedY;
-        this.x += this.speedX + Math.sin(this.life * 0.1) * 0.5; // Wobbly path
-        this.life -= 2; // Burn out faster
-        if (this.size > 0.2) this.size -= 0.2;
+        this.x += Math.cos(this.angle) * this.speed;
+        this.y += Math.sin(this.angle) * this.speed;
+
+        this.length += 0.5; // Stretch as it moves out
+        this.life -= 1.5;
+
+        if (this.life <= 0 ||
+          this.x < -100 || this.x > canvas!.width + 100 ||
+          this.y < -100 || this.y > canvas!.height + 100) {
+          this.reset();
+        }
       }
 
       draw() {
         if (!ctx) return;
         const lifeRatio = this.life / this.maxLife;
 
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-
-        // Dynamic color based on life
+        // Coloring
         if (lifeRatio > 0.8) {
-          ctx.fillStyle = `rgba(255, 255, 200, ${lifeRatio})`; // White/Yellow hot
-        } else if (lifeRatio > 0.5) {
-          ctx.fillStyle = `rgba(255, 160, 0, ${lifeRatio})`; // Orange
+          ctx.fillStyle = `rgba(255, 255, 220, ${lifeRatio})`; // Hot White
+        } else if (lifeRatio > 0.4) {
+          ctx.fillStyle = `rgba(255, 160, 20, ${lifeRatio})`; // Orange
         } else {
-          ctx.fillStyle = `rgba(255, 69, 0, ${lifeRatio})`; // Red
+          ctx.fillStyle = `rgba(200, 40, 0, ${lifeRatio})`; // Red
         }
 
-        ctx.fill();
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.angle); // Rotate to point outward
+        // Draw line centered on its coordinate
+        ctx.fillRect(0, -this.thickness / 2, this.length, this.thickness);
+        ctx.restore();
       }
     }
 
-    // Additive blending for glowing fire effect
+    // Additive blending for glowing fire lines
     ctx.globalCompositeOperation = 'lighter';
 
     const particles: Particle[] = [];
     const createParticles = () => {
-      // Create multiple particles per frame for density
-      for (let i = 0; i < 3; i++) {
-        if (particles.length < 400) {
-          particles.push(new Particle());
-        }
+      // Allow more particles for a denser fire
+      if (particles.length < 600) {
+        particles.push(new Particle());
       }
     };
 
@@ -163,12 +177,14 @@ const PersistentWheel: React.FC = () => {
 
       createParticles();
       for (let i = 0; i < particles.length; i++) {
+        // Create new particles only if the array isn't full (handled in createParticles)
+        // But here we just update existing ones
+        if (particles.length < 600) createParticles();
+      }
+
+      for (let i = 0; i < particles.length; i++) {
         particles[i].update();
         particles[i].draw();
-        if (particles[i].life <= 0 || particles[i].size <= 0) {
-          particles.splice(i, 1);
-          i--;
-        }
       }
       requestAnimationFrame(animateParticles);
     }
@@ -190,7 +206,7 @@ const PersistentWheel: React.FC = () => {
         <canvas ref={canvasRef} className="absolute inset-0 w-full h-full -z-10" />
 
         <img
-          src="/Wheel.png"
+          src="/Wheel Glow.png"
           alt="Chakra Wheel"
           className="main-chakra-img w-full h-full object-contain filter drop-shadow-[0_0_80px_rgba(251,191,36,0.3)]"
         />
