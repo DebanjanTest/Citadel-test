@@ -22,7 +22,7 @@ const HackathonIntro: React.FC = () => {
     }, []);
 
     return (
-        <section className="hackathon-section relative w-full pt-32 pb-6 px-6 flex justify-center items-center z-20 overflow-hidden">
+        <section className="hackathon-section relative w-full pt-20 md:pt-32 pb-6 px-6 flex justify-center items-center z-20 overflow-hidden">
             {/* Background Luminance/Shadow */}
             <div className="absolute inset-0 flex justify-center items-center pointer-events-none">
                 <div className="w-[120%] h-[150%] bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.8)_0%,transparent_70%)] blur-xl"></div>

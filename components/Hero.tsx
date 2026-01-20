@@ -33,7 +33,7 @@ const Hero: React.FC = () => {
   }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center px-6 md:px-16 pt-20 overflow-hidden">
+    <section className="relative min-h-screen flex items-center px-6 md:px-16 pt-32 md:pt-20 overflow-hidden">
       {/* Decorative Tech Lines */}
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-0">
         <div className="absolute top-[20%] left-0 w-[40%] h-[1px] bg-gradient-to-r from-transparent via-amber-600 to-transparent tech-line origin-left opacity-30"></div>
@@ -48,7 +48,7 @@ const Hero: React.FC = () => {
       <div className="relative z-20 max-w-4xl">
         <div className="overflow-hidden py-2">
           {/* Metallic Gold Title Effect */}
-          <h1 className="hero-title font-samarkan text-7xl sm:text-9xl md:text-[10rem] lg:text-[11rem] leading-[0.9] tracking-wider uppercase text-transparent bg-clip-text bg-gradient-to-b from-[#fcd34d] via-[#f59e0b] to-[#78350f] drop-shadow-[0_2px_10px_rgba(245,158,11,0.5)]">
+          <h1 className="hero-title font-samarkan text-5xl sm:text-7xl md:text-[10rem] lg:text-[11rem] leading-[0.9] tracking-wider uppercase text-transparent bg-clip-text bg-gradient-to-b from-[#fcd34d] via-[#f59e0b] to-[#78350f] drop-shadow-[0_2px_10px_rgba(245,158,11,0.5)]">
             citadel 1.0
           </h1>
         </div>

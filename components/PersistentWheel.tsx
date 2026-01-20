@@ -11,13 +11,31 @@ const PersistentWheel: React.FC = () => {
     if (!wheelRef.current) return;
 
     // Initial state setup
-    gsap.set(wheelRef.current, {
-      scale: 1,
-      opacity: 0.8, // Increased visibility
-      top: "15%",
-      right: "-10%",
-      xPercent: 0,
-      yPercent: 0
+    // Initial state setup via matchMedia
+    const mm = gsap.matchMedia();
+
+    mm.add("(min-width: 769px)", () => {
+      gsap.set(wheelRef.current, {
+        scale: 1,
+        opacity: 0.8,
+        top: "15%",
+        right: "-10%",
+        left: "auto",
+        xPercent: 0,
+        yPercent: 0
+      });
+    });
+
+    mm.add("(max-width: 768px)", () => {
+      gsap.set(wheelRef.current, {
+        scale: 0.8,
+        opacity: 0.15, // Much more subtle to avoid cluttering text
+        top: "20%",    // Sit behind the text
+        left: "50%",
+        right: "auto",
+        xPercent: -50,
+        yPercent: 0
+      });
     });
 
     // Constant rotation of the main chakra
@@ -29,50 +47,97 @@ const PersistentWheel: React.FC = () => {
     });
 
     // Consistent pathing throughout the page with smoother scale transitions
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: "body",
-        start: "top top",
-        end: "bottom bottom",
-        scrub: 1, // Adjusted for tighter response to scroll (faster feel)
-      }
+    // reusing existing 'mm' instance
+
+    mm.add("(min-width: 769px)", () => {
+      // DESKTOP ANIMATION
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: "body",
+          start: "top top",
+          end: "bottom bottom",
+          scrub: 1,
+        }
+      });
+
+      tl.to(wheelRef.current, {
+        top: "120vh",
+        left: "-12%",
+        scale: 1.3,
+        opacity: 0.6,
+        rotationY: 45,
+        duration: 1.5
+      })
+        .to(wheelRef.current, {
+          top: "220vh",
+          left: "-12%",
+          scale: 1.0,
+          opacity: 0.4,
+          rotationY: 20,
+          duration: 2
+        })
+        .to(wheelRef.current, {
+          top: "350vh",
+          left: "40%",
+          scale: 1.4,
+          opacity: 0.75,
+          rotationX: 45,
+          duration: 1
+        })
+        .to(wheelRef.current, {
+          top: "520vh",
+          left: "70%",
+          scale: 1.05,
+          opacity: 0.9,
+          rotationY: 15,
+          duration: 1
+        });
     });
 
-    tl.to(wheelRef.current, {
-      top: "120vh", // Move down to the intro section
-      left: "-12%", // Dock to left side, protruding
-      scale: 1.3, // Larger presence
-      opacity: 0.6, // Fade slightly as requested
-      rotationY: 45, // Angled view
-      duration: 1.5
-    })
-      .to(wheelRef.current, {
-        top: "220vh",
-        left: "-12%", // Stay docked on left
-        scale: 1.0,
-        opacity: 0.4,
-        rotationY: 20,
-        duration: 2
-      })
-      .to(wheelRef.current, {
-        top: "350vh",
-        left: "40%", // Return to center/interactive for later sections
-        scale: 1.4,
-        opacity: 0.75,
-        rotationX: 45,
-        duration: 1
-      })
-      .to(wheelRef.current, {
-        top: "520vh",
-        left: "70%",
-        scale: 1.05,
-        opacity: 0.9,
-        rotationY: 15,
-        duration: 1
+    mm.add("(max-width: 768px)", () => {
+      // MOBILE ANIMATION
+      // Center the wheel or make it a subtle background element
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: "body",
+          start: "top top",
+          end: "bottom bottom",
+          scrub: 1,
+        }
       });
+
+      tl.to(wheelRef.current, {
+        top: "120vh",
+        left: "50%",      // Center it
+        xPercent: -50,    // True center
+        scale: 0.8,       // Smaller
+        opacity: 0.3,     // Very faint
+        rotationY: 10,
+        duration: 1.5
+      })
+        .to(wheelRef.current, {
+          top: "250vh",
+          scale: 0.6,
+          opacity: 0.2,
+          duration: 2
+        })
+        .to(wheelRef.current, {
+          top: "380vh",
+          scale: 0.9,
+          opacity: 0.4,
+          duration: 1
+        })
+        .to(wheelRef.current, {
+          top: "550vh",
+          scale: 0.7,
+          opacity: 0.5,
+          duration: 1
+        });
+    });
 
     return () => {
       ScrollTrigger.getAll().forEach(t => t.kill());
+      mm.revert(); // Clean up media query listeners
     };
   }, []);
 
@@ -202,8 +267,8 @@ const PersistentWheel: React.FC = () => {
       style={{ perspective: '1200px' }}
     >
       <div className="relative w-full h-full hover-3d" style={{ transformStyle: 'preserve-3d' }}>
-        {/* Canvas for Fire Effect */}
-        <canvas ref={canvasRef} className="absolute inset-0 w-full h-full -z-10" />
+        {/* Canvas for Fire Effect - Expanded to prevent clipping */}
+        <canvas ref={canvasRef} className="absolute -inset-[75%] w-[250%] h-[250%] -z-10 scale-100" style={{ maskImage: 'radial-gradient(circle, black 40%, transparent 70%)', WebkitMaskImage: 'radial-gradient(circle, black 40%, transparent 70%)' }} />
 
         <img
           src="/Wheel Glow.png"

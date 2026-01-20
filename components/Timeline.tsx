@@ -70,15 +70,15 @@ const Timeline: React.FC = () => {
           <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-[2px] bg-gradient-to-b from-transparent via-amber-600/40 to-transparent -translate-x-1/2 hidden md:block"></div>
 
           {events.map((ev, i) => (
-            <div key={i} className={`flex flex-col md:flex-row gap-12 md:gap-24 items-start md:items-center ${i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
+            <div key={i} className={`flex flex-col md:flex-row gap-8 md:gap-24 items-start md:items-center ${i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
               <div className={`flex-1 w-full group ${i % 2 === 0 ? 'md:text-right' : 'md:text-left'}`}>
-                <div className="bg-black/90 backdrop-blur-3xl border border-amber-900/60 p-10 md:p-14 rounded-sm hover:border-amber-400 transition-all duration-700 shadow-2xl relative">
+                <div className="bg-black/90 backdrop-blur-3xl border border-amber-900/60 p-6 md:p-14 rounded-sm hover:border-amber-400 transition-all duration-700 shadow-2xl relative">
                   <span className="font-pyriform text-amber-500 font-bold uppercase tracking-[0.2em] text-sm md:text-lg mb-4 block">{ev.day} • {ev.time}</span>
                   <h3 className="font-samarkan text-3xl md:text-5xl text-amber-50 group-hover:text-amber-400 transition-colors">{ev.title}</h3>
                   <p className="font-karma text-xl md:text-3xl text-amber-100/40 mt-8 italic">{ev.desc}</p>
                 </div>
               </div>
-              <div className="relative z-20 flex-shrink-0">
+              <div className="relative z-20 flex-shrink-0 hidden md:flex">
                 <div className="w-16 h-16 md:w-24 md:h-24 rounded-full border-4 border-amber-500 bg-black flex items-center justify-center shadow-[0_0_50px_rgba(251,191,36,0.3)]">
                   {/* Use Arrow.png instead of CSS arrow */}
                   <img
