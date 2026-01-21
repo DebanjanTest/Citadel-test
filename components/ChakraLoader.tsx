@@ -17,23 +17,23 @@ const ChakraLoader: React.FC = () => {
               </linearGradient>
             </defs>
             <circle cx="50" cy="50" r="48" fill="none" stroke="url(#loadGold)" strokeWidth="1.5" strokeDasharray="3 3" />
-            
+
             {[...Array(16)].map((_, i) => (
               <g key={i} transform={`rotate(${i * 22.5} 50 50)`}>
                 <path d="M49 5 L51 5 L51 40 L49 40 Z" fill="url(#loadGold)" />
                 <circle cx="50" cy="6" r="1.5" fill="#fff" />
               </g>
             ))}
-            
+
             <circle cx="50" cy="50" r="18" fill="url(#loadGold)" />
             <circle cx="50" cy="50" r="12" fill="#050505" />
             <path d="M50 44 Q56 50 50 56 Q44 50 50 44" fill="#fbbf24" className="animate-pulse" />
           </svg>
         </div>
       </div>
-      
+
       <div className="mt-20 text-center space-y-8 relative z-10">
-        <h2 className="font-samarkan text-5xl md:text-7xl text-amber-500 tracking-wider font-bold gold-glow animate-pulse">
+        <h2 className="font-samarkan text-5xl md:text-7xl text-amber-500 tracking-tight font-bold gold-glow animate-pulse">
           CITADEL 1.0
         </h2>
         <p className="font-pyriform text-amber-200/50 text-xl tracking-[0.4em] uppercase font-bold">

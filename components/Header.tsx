@@ -13,7 +13,7 @@ const Header: React.FC = () => {
 
   return (
     <header className="fixed top-0 left-0 w-full z-[60] px-8 md:px-16 py-8 flex justify-between items-center bg-black/40 backdrop-blur-lg transition-all border-b border-white/5">
-      <div className="text-3xl md:text-5xl font-samarkan font-bold text-amber-500 gold-glow tracking-widest cursor-pointer relative z-50">
+      <div className="text-3xl md:text-5xl font-samarkan font-bold text-amber-500 gold-glow tracking-normal cursor-pointer relative z-50">
         CITADEL 1.0
       </div>
 

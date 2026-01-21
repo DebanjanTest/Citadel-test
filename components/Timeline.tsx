@@ -31,7 +31,7 @@ const Timeline: React.FC = () => {
             scrub: 0.05 + (Math.random() * 4),
           },
           x: endX, y: yEnd,
-          opacity: Math.random() * 0.8 + 0.1,
+          opacity: Math.random() * 0.5 + 0.5, // Increased opacity (0.5 to 1.0)
           ease: "none"
         }
       );
@@ -62,7 +62,7 @@ const Timeline: React.FC = () => {
 
       <div className="max-w-6xl mx-auto relative z-10">
         <div className="text-center mb-32">
-          <h2 className="font-samarkan text-6xl md:text-9xl text-amber-500 gold-glow tracking-widest uppercase">Kaal Chakra</h2>
+          <h2 className="font-samarkan text-6xl md:text-9xl text-amber-500 gold-glow tracking-tight uppercase">Kaal Chakra</h2>
           <p className="font-pyriform text-amber-200/60 text-2xl md:text-3xl tracking-[0.4em] mt-8 uppercase">— CHRONICLES OF TIME —</p>
         </div>
 

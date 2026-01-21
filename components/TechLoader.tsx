@@ -17,6 +17,16 @@ const TechLoader: React.FC = ({ onComplete }: { onComplete?: () => void }) => {
 
     // Audio Initialization
     const initAudio = async () => {
+        // Preload Critical Images
+        const preloadImages = [
+            "/Wheel Glow.png",
+            "/Arrow.png"
+        ];
+        preloadImages.forEach(src => {
+            const img = new Image();
+            img.src = src;
+        });
+
         if (!audioCtxRef.current) {
             const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
             audioCtxRef.current = new AudioContextClass();
@@ -438,7 +448,7 @@ const TechLoader: React.FC = ({ onComplete }: { onComplete?: () => void }) => {
 
             {/* Text Info */}
             <div className="z-10 text-center space-y-6">
-                <h1 ref={glitchRef} className="text-6xl md:text-8xl font-bold tracking-[0.2em] text-amber-50 drop-shadow-[0_0_15px_rgba(245,158,11,0.6)] font-samarkan">
+                <h1 ref={glitchRef} className="text-6xl md:text-8xl font-bold tracking-tight text-amber-50 drop-shadow-[0_0_15px_rgba(245,158,11,0.6)] font-samarkan">
                     CITADEL
                 </h1>
 

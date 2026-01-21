@@ -26,7 +26,7 @@ const About: React.FC = () => {
       <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 md:gap-24 items-center relative z-10">
         <div className="about-item space-y-8">
           <div className="space-y-4">
-            <h2 className="font-samarkan text-4xl md:text-7xl text-amber-500 gold-glow leading-tight font-black uppercase tracking-wider">
+            <h2 className="font-samarkan text-4xl md:text-7xl text-amber-500 gold-glow leading-tight font-black uppercase tracking-tight">
               The Legend <br /><span className="text-amber-100/40 text-2xl md:text-3xl font-light">of Citadel</span>
             </h2>
             <div className="h-1.5 w-32 bg-gradient-to-r from-amber-600 to-transparent"></div>
@@ -38,11 +38,11 @@ const About: React.FC = () => {
 
           <div className="grid sm:grid-cols-2 gap-6 pt-6">
             <div className="border border-amber-900/40 bg-amber-950/20 p-8 rounded-sm hover:border-amber-500/60 transition-all group backdrop-blur-lg">
-              <h4 className="font-samarkan text-amber-500 font-black text-3xl mb-1 group-hover:gold-glow">48 PRAHARAS</h4>
+              <h4 className="font-samarkan text-amber-500 font-black text-3xl mb-1 group-hover:gold-glow tracking-tight">48 PRAHARAS</h4>
               <p className="font-pyriform text-[10px] uppercase tracking-[0.4em] text-amber-200/40 font-bold">continuous creation</p>
             </div>
             <div className="border border-amber-900/40 bg-amber-950/20 p-8 rounded-sm hover:border-amber-500/60 transition-all group backdrop-blur-lg">
-              <h4 className="font-samarkan text-amber-500 font-black text-3xl mb-1 group-hover:gold-glow">500+ RISHIS</h4>
+              <h4 className="font-samarkan text-amber-500 font-black text-3xl mb-1 group-hover:gold-glow tracking-tight">500+ RISHIS</h4>
               <p className="font-pyriform text-[10px] uppercase tracking-[0.4em] text-amber-200/40 font-bold">global intelligence</p>
             </div>
           </div>

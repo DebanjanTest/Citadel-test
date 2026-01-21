@@ -46,9 +46,9 @@ const Hero: React.FC = () => {
       </div>
 
       <div className="relative z-20 max-w-4xl">
-        <div className="overflow-hidden py-2">
+        <div className="overflow-hidden py-6">
           {/* Metallic Gold Title Effect */}
-          <h1 className="hero-title font-samarkan text-5xl sm:text-7xl md:text-[10rem] lg:text-[11rem] leading-[0.9] tracking-wider uppercase text-transparent bg-clip-text bg-gradient-to-b from-[#fcd34d] via-[#f59e0b] to-[#78350f] drop-shadow-[0_2px_10px_rgba(245,158,11,0.5)]">
+          <h1 className="hero-title font-samarkan text-5xl sm:text-7xl md:text-[10rem] lg:text-[11rem] leading-[1.1] tracking-[-0.02em] uppercase text-transparent bg-clip-text bg-gradient-to-b from-[#fcd34d] via-[#f59e0b] to-[#78350f] drop-shadow-[0_2px_10px_rgba(245,158,11,0.5)]">
             citadel 1.0
           </h1>
         </div>
