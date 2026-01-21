@@ -6,7 +6,7 @@ import Header from './components/Header.tsx';
 import Hero from './components/Hero.tsx';
 import HackathonIntro from './components/HackathonIntro.tsx';
 import About from './components/About.tsx';
-import ChakraLoader from './components/ChakraLoader.tsx';
+import TechLoader from './components/TechLoader.tsx';
 import Background from './components/Background.tsx';
 import VyuhaSection from './components/VyuhaSection.tsx';
 import Timeline from './components/Timeline.tsx';
@@ -24,7 +24,7 @@ const App: React.FC = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 4000);
+    }, 4500);
     return () => clearTimeout(timer);
   }, []);
 
@@ -56,7 +56,7 @@ const App: React.FC = () => {
   }, [loading]);
 
   if (loading) {
-    return <ChakraLoader />;
+    return <TechLoader />;
   }
 
   return (
