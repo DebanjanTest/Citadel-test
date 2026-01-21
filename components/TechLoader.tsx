@@ -35,73 +35,201 @@ const TechLoader: React.FC = ({ onComplete }: { onComplete?: () => void }) => {
         }
     };
 
-    // Sound Generators
+    // Sound Generators - Dark/Serious Edition
+
+    // 1. Dark Ambient Drone (FM Synthesis)
     const playDrone = () => {
         if (!audioCtxRef.current || !masterGainRef.current) return;
         const ctx = audioCtxRef.current;
 
-        // Low drone
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.frequency.setValueAtTime(110, ctx.currentTime); // Higher pitch (A2) for better visibility on laptops
-        osc.type = 'sawtooth'; // Sawtooth has more harmonics
+        // Carrier (Deep Low End)
+        const carrierOsc = ctx.createOscillator();
+        carrierOsc.type = 'sine';
+        carrierOsc.frequency.setValueAtTime(40, ctx.currentTime); // Deep sub-bass
 
-        // Filter for "muffled" reactor sound
-        const filter = ctx.createBiquadFilter();
-        filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(200, ctx.currentTime);
+        // Modulator (Throbbing effect)
+        const modOsc = ctx.createOscillator();
+        modOsc.type = 'sine';
+        modOsc.frequency.setValueAtTime(0.2, ctx.currentTime); // Slow throb (0.2Hz)
 
-        osc.connect(filter);
-        filter.connect(gain);
-        gain.connect(masterGainRef.current);
+        const modGain = ctx.createGain();
+        modGain.gain.setValueAtTime(50, ctx.currentTime); // Modulation depth
 
-        gain.gain.setValueAtTime(0, ctx.currentTime);
-        gain.gain.linearRampToValueAtTime(0.4, ctx.currentTime + 2); // Slightly lower individual gain to prevent clipping with master
+        // Wiring FM
+        modOsc.connect(modGain);
+        modGain.connect(carrierOsc.frequency);
 
-        osc.start();
-        return { osc, gain };
+        // Noise Layer for "Grit"
+        const bufferSize = ctx.sampleRate * 2; // 2 seconds of noise
+        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+            data[i] = Math.random() * 2 - 1;
+        }
+        const noise = ctx.createBufferSource();
+        noise.buffer = buffer;
+        noise.loop = true;
+
+        const noiseFilter = ctx.createBiquadFilter();
+        noiseFilter.type = 'lowpass';
+        noiseFilter.frequency.setValueAtTime(400, ctx.currentTime); // Muffled static
+
+        const noiseGain = ctx.createGain();
+        noiseGain.gain.setValueAtTime(0.05, ctx.currentTime);
+
+        noise.connect(noiseFilter);
+        noiseFilter.connect(noiseGain);
+
+        // Master connect for drone
+        const droneGain = ctx.createGain();
+        droneGain.gain.setValueAtTime(0, ctx.currentTime);
+        droneGain.gain.linearRampToValueAtTime(0.6, ctx.currentTime + 3);
+
+        carrierOsc.connect(droneGain);
+        noiseGain.connect(droneGain);
+        droneGain.connect(masterGainRef.current);
+
+        carrierOsc.start();
+        modOsc.start();
+        noise.start();
+
+        return { osc: carrierOsc, mod: modOsc, noise: noise, gain: droneGain };
     };
 
+    // 2. Static/Data Glitch (White Noise Bursts)
     const playGlitchSound = () => {
         if (!audioCtxRef.current || !masterGainRef.current) return;
         const ctx = audioCtxRef.current;
 
-        const osc = ctx.createOscillator();
+        // Create noise buffer on the fly (short)
+        const bufferSize = ctx.sampleRate * 0.1;
+        const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+            data[i] = Math.random() * 2 - 1;
+        }
+
+        const noise = ctx.createBufferSource();
+        noise.buffer = buffer;
+
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'highpass';
+        filter.frequency.setValueAtTime(1000, ctx.currentTime); // Thin, crisp static
+
         const gain = ctx.createGain();
+        gain.gain.setValueAtTime(0.15, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.05);
 
-        osc.type = Math.random() > 0.5 ? 'square' : 'sawtooth';
-        osc.frequency.setValueAtTime(200 + Math.random() * 800, ctx.currentTime);
-
-        osc.connect(gain);
+        noise.connect(filter);
+        filter.connect(gain);
         gain.connect(masterGainRef.current);
 
-        gain.gain.setValueAtTime(0.05, ctx.currentTime); // Reduced individual gain
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
-
-        osc.start();
-        osc.stop(ctx.currentTime + 0.1);
+        noise.start();
     };
 
+    // 3. Mechanical Turbine Charge (Rhythmic Buildup)
     const playPowerUp = (duration: number) => {
         if (!audioCtxRef.current || !masterGainRef.current) return;
         const ctx = audioCtxRef.current;
+        const now = ctx.currentTime;
 
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
+        const mainGain = ctx.createGain();
+        mainGain.connect(masterGainRef.current);
+        mainGain.gain.setValueAtTime(0, now);
+        mainGain.gain.linearRampToValueAtTime(0.5, now + duration);
+        mainGain.gain.linearRampToValueAtTime(0, now + duration + 0.5);
 
-        osc.type = 'triangle'; // Triangle is smoother than sine
-        osc.frequency.setValueAtTime(200, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(800, ctx.currentTime + duration);
+        // 1. The "Rotor" (Chopped Noise)
+        // Create noise
+        const bufferSize = ctx.sampleRate * duration;
+        const rotorBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const data = rotorBuffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+            data[i] = Math.random() * 2 - 1;
+        }
+        const rotor = ctx.createBufferSource();
+        rotor.buffer = rotorBuffer;
 
-        osc.connect(gain);
-        gain.connect(masterGainRef.current);
+        // Filter noise to be heavy
+        const rotorFilter = ctx.createBiquadFilter();
+        rotorFilter.type = 'lowpass';
+        rotorFilter.frequency.setValueAtTime(100, now);
+        rotorFilter.frequency.exponentialRampToValueAtTime(800, now + duration);
 
-        gain.gain.setValueAtTime(0, ctx.currentTime);
-        gain.gain.linearRampToValueAtTime(0.3, ctx.currentTime + (duration * 0.1));
-        gain.gain.linearRampToValueAtTime(0, ctx.currentTime + duration);
+        // Create LFO for the "Chopping" effect (AM Synthesis)
+        const lfo = ctx.createOscillator();
+        lfo.type = 'square';
+        lfo.frequency.setValueAtTime(8, now); // Starts at 8Hz (idling)
+        lfo.frequency.exponentialRampToValueAtTime(60, now + duration); // Speeds up to 60Hz (hum)
 
-        osc.start();
-        osc.stop(ctx.currentTime + duration);
+        const lfoGain = ctx.createGain();
+        lfoGain.gain.value = 1; // Full modulation
+
+        // Connect LFO to rotor gain
+        const rotorGain = ctx.createGain();
+        rotorGain.gain.value = 0; // Base gain is 0, modulated by LFO
+
+        // Handling AM Logic: 
+        // We want the noise to turn ON/OFF based on LFO.
+        // Web Audio LFO connects to AudioParam. 
+        // To make it chop clearly, we use a constant node + LFO? 
+        // Simpler approach: Just connect LFO to Gain. Gain goes -1 to 1. We just want 0 to 1.
+        // So we offset it.
+
+        // Actually, simplest "Engine" sound is just a Sawtooth rising in pitch + Noise.
+        // Let's do a reliable "Tesla Charge" instead of complex AM which can be buggy if not careful.
+
+        // REVISED STRATEGY: Tesla Charge
+        // 1. High Pitch Whine (Sine)
+        const whine = ctx.createOscillator();
+        whine.type = 'sine';
+        whine.frequency.setValueAtTime(200, now);
+        whine.frequency.exponentialRampToValueAtTime(3000, now + duration);
+
+        const whineGain = ctx.createGain();
+        whineGain.gain.setValueAtTime(0, now);
+        whineGain.gain.linearRampToValueAtTime(0.2, now + duration);
+
+        whine.connect(whineGain);
+        whineGain.connect(mainGain);
+        whine.start();
+        whine.stop(now + duration + 0.5);
+
+        // 2. Low Energy Rumble (Sawtooth + Lowpass)
+        const rumble = ctx.createOscillator();
+        rumble.type = 'sawtooth';
+        rumble.frequency.setValueAtTime(40, now);
+        rumble.frequency.linearRampToValueAtTime(150, now + duration); // Rises slightly
+
+        const rumbleFilter = ctx.createBiquadFilter();
+        rumbleFilter.type = 'lowpass';
+        rumbleFilter.frequency.setValueAtTime(100, now);
+        rumbleFilter.frequency.linearRampToValueAtTime(1000, now + duration); // Opens up
+
+        const rumbleGain = ctx.createGain();
+        rumbleGain.gain.setValueAtTime(0, now);
+        rumbleGain.gain.linearRampToValueAtTime(0.3, now + duration);
+
+        rumble.connect(rumbleFilter);
+        rumbleFilter.connect(rumbleGain);
+        rumbleGain.connect(mainGain);
+        rumble.start();
+        rumble.stop(now + duration + 0.5);
+
+        // 3. The "Pulse" (Square wave LFO effect manually simulated with a beat)
+        // Just a simple beating wave
+        const beat = ctx.createOscillator();
+        beat.type = 'square';
+        beat.frequency.setValueAtTime(50, now);
+        beat.frequency.linearRampToValueAtTime(55, now + duration); // Beat frequency against rumble
+        // This is subtle interference
+
+        const beatGain = ctx.createGain();
+        beatGain.gain.value = 0.05;
+        beat.connect(beatGain);
+        beatGain.connect(mainGain);
+        beat.start();
+        beat.stop(now + duration + 0.5);
     };
 
     useEffect(() => {
@@ -190,8 +318,14 @@ const TechLoader: React.FC = ({ onComplete }: { onComplete?: () => void }) => {
             // Fade out drone
             exitTl.call(() => {
                 if (droneNodes && audioCtxRef.current) {
+                    // droneNodes is now { osc, mod, noise, gain }
+                    // We just fade the gain and stop the sources
                     droneNodes.gain.gain.linearRampToValueAtTime(0, audioCtxRef.current.currentTime + 1);
-                    droneNodes.osc.stop(audioCtxRef.current.currentTime + 1);
+
+                    const stopTime = audioCtxRef.current.currentTime + 1;
+                    droneNodes.osc.stop(stopTime);
+                    if ((droneNodes as any).mod) (droneNodes as any).mod.stop(stopTime);
+                    if ((droneNodes as any).noise) (droneNodes as any).noise.stop(stopTime);
                 }
             }, undefined, "start");
 
