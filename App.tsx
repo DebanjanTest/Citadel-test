@@ -14,6 +14,8 @@ import Prizes from './components/Prizes.tsx';
 import FAQ from './components/FAQ.tsx';
 import Footer from './components/Footer.tsx';
 import PersistentWheel from './components/PersistentWheel.tsx';
+import Sponsors from './components/Sponsors.tsx';
+import Stats from './components/Stats.tsx';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -62,7 +64,8 @@ const App: React.FC = () => {
   return (
     <div ref={mainRef} className="relative min-h-screen text-amber-50 selection:bg-amber-600 selection:text-white bg-[#050505] overflow-x-hidden">
       {/* Background layer always sits at the very bottom */}
-      <Background />
+      {/* Background layer removed as per user request to avoid overlap */}
+      {/* <Background /> */}
 
       {/* Persistent Wheel sits between background and main content */}
       <PersistentWheel />
@@ -73,11 +76,13 @@ const App: React.FC = () => {
 
         <main className="relative z-20">
           <Hero />
+          <Stats />
           <HackathonIntro />
           <About />
           <VyuhaSection />
           <Timeline />
           <Prizes />
+          <Sponsors />
           <FAQ />
         </main>
 

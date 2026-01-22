@@ -6,6 +6,9 @@ const VyuhaSection: React.FC = () => {
     { title: "Padmavyuha", desc: "The Labyrinth of Logic. Forge distributed systems that withstand the chaos of time.", icon: "💠" },
     { title: "Chakravyuha", desc: "The Infinite Cycle. Master state management and recursive algorithms in the core.", icon: "☸️" },
     { title: "Garudavyuha", desc: "The Wings of Wisdom. Soar through high-performance AI and neural landscapes.", icon: "🦅" },
+    { title: "Vajravyuha", desc: "The Thunderbolt Strike. Secure your fortress with impenetrable cybersecurity.", icon: "⚡" },
+    { title: "Makaravyuha", desc: "The Crocodile Grip. Lock digital assets in the immutable chains of Blockchain.", icon: "🐊" },
+    { title: "Suchivyuha", desc: "The Needle's Point. Pierce the veil of reality with precision IoT and Hardware.", icon: "📍" },
   ];
 
   return (
