@@ -2,6 +2,7 @@
 import React, { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import DustOverlay from './DustOverlay';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -19,8 +20,8 @@ const Hero: React.FC = () => {
         trigger: heroRef.current,
         start: "top top",
         end: "bottom top",
-        scrub: true,
-        pin: false, // Don't pin the whole hero, let it scroll but animate parallax
+        scrub: 1, // Smooth scrubbing
+        pin: false,
       }
     });
 
@@ -28,17 +29,16 @@ const Hero: React.FC = () => {
     // Background moves slowly (depth)
     tl.to(bgRef.current, {
       y: 100,
-      scale: 1.2, // Increased scale to prevent gaps
+      scale: 1.2,
       ease: "none"
     }, 0);
 
-    // Foreground zooms in aggressively (intrusive 3D effect)
-    // Adjust scale and z-index feel
+    // Foreground zooms in (intrusive 3D effect)
     tl.to(fgRef.current, {
-      scale: 2.5, // Significant zoom
-      y: 200,     // Move down faster than background
-      opacity: 0, // Fade out eventually as it passes "through" the camera
-      ease: "power1.in"
+      scale: 1.6, // More controlled zoom
+      y: 100,
+      opacity: 1,
+      ease: "power1.out"
     }, 0);
 
     // Content (Title) moves at a medium pace and fades
@@ -82,34 +82,46 @@ const Hero: React.FC = () => {
           ref={bgRef}
           src="/Backgrounds/background1.png"
           alt="Citadel Battle Layer"
-          className="w-full h-full object-cover opacity-100"
+          className="w-full h-full object-cover opacity-100 brightness-110 saturate-125"
         />
       </div>
 
       {/* Vignette Overlay (Z-1) - Sits on top of background but below foreground */}
       <div className="absolute inset-0 z-1 pointer-events-none bg-[radial-gradient(circle_at_center,transparent_40%,#050505_100%)]"></div>
 
+      {/* Blurred Filler Layer (Z-5) - Handles edges if main image doesn't cover */}
+      <div className="absolute inset-0 z-5 pointer-events-none">
+        <img
+          src="/Backgrounds/foreground1.png"
+          alt="Blurred Background Filler"
+          className="w-full h-full object-cover blur-3xl opacity-60 brightness-100 saturate-125 scale-110"
+        />
+      </div>
+
       {/* Foreground Layer - Intrusive Element (Z-10) */}
       <div className="absolute inset-0 z-10 pointer-events-none">
         <img
           ref={fgRef}
-          src="/Backgrounds/foreground.png"
+          src="/Backgrounds/foreground1.png"
           alt="Citadel Interface"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-contain object-left-bottom brightness-110 saturate-125 drop-shadow-2xl" // Anchored bottom-left, uncropped
         />
       </div>
 
-      {/* Main Hero Content (Z-20) */}
-      <div ref={contentRef} className="relative z-20 max-w-5xl text-center px-6">
+      {/* Dust Overlay Layer (Z-25) - Floating particles across screen */}
+      <DustOverlay />
+
+      {/* Main Hero Content (Z-30) */}
+      <div ref={contentRef} className="relative z-30 max-w-5xl text-center px-6">
         <div className="overflow-hidden py-4">
-          {/* Metallic Gold Title Effect */}
-          <h1 className="hero-title font-samarkan text-6xl sm:text-8xl md:text-[10rem] lg:text-[12rem] leading-[1] tracking-normal uppercase text-transparent bg-clip-text bg-gradient-to-b from-[#fcd34d] via-[#f59e0b] to-[#78350f] drop-shadow-[0_2px_10px_rgba(245,158,11,0.5)]">
+          {/* Metallic Gold Title Effect - Resized */}
+          <h1 className="hero-title font-samarkan text-5xl sm:text-7xl md:text-[6rem] lg:text-[8rem] leading-[1] tracking-normal uppercase text-transparent bg-clip-text bg-gradient-to-b from-[#fcd34d] via-[#f59e0b] to-[#78350f] drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] filter">
             citadel 1.0
           </h1>
         </div>
 
         <div className="overflow-hidden mt-4 mb-10">
-          <p className="hero-subtitle font-pyriform text-2xl sm:text-3xl md:text-4xl text-amber-100/90 tracking-[0.3em] lowercase glow-text">
+          <p className="hero-subtitle font-pyriform text-xl sm:text-2xl md:text-3xl text-amber-100/90 tracking-[0.3em] lowercase glow-text">
             the dharma of code
           </p>
         </div>
