@@ -76,27 +76,30 @@ const Hero: React.FC = () => {
 
   return (
     <section ref={heroRef} className="relative h-screen flex items-center justify-center overflow-hidden bg-[#050505]">
-      {/* Background Layer - Battle Layer */}
+      {/* Background Layer - Battle Layer (Z-0) */}
       <div className="absolute inset-0 z-0">
         <img
           ref={bgRef}
-          src="/backgrounds/background1.png"
+          src="/Backgrounds/background1.png"
           alt="Citadel Battle Layer"
           className="w-full h-full object-cover opacity-100"
         />
       </div>
 
-      {/* Foreground Layer - Intrusive Element */}
+      {/* Vignette Overlay (Z-1) - Sits on top of background but below foreground */}
+      <div className="absolute inset-0 z-1 pointer-events-none bg-[radial-gradient(circle_at_center,transparent_40%,#050505_100%)]"></div>
+
+      {/* Foreground Layer - Intrusive Element (Z-10) */}
       <div className="absolute inset-0 z-10 pointer-events-none">
         <img
           ref={fgRef}
-          src="/backgrounds/foreground.png"
+          src="/Backgrounds/foreground.png"
           alt="Citadel Interface"
           className="w-full h-full object-cover"
         />
       </div>
 
-      {/* Main Hero Content - Sandwiched but clickable */}
+      {/* Main Hero Content (Z-20) */}
       <div ref={contentRef} className="relative z-20 max-w-5xl text-center px-6">
         <div className="overflow-hidden py-4">
           {/* Metallic Gold Title Effect */}
@@ -123,9 +126,6 @@ const Hero: React.FC = () => {
           </button>
         </div>
       </div>
-
-      {/* Vignette Overlay to blend edges */}
-      <div className="absolute inset-0 z-0 pointer-events-none bg-[radial-gradient(circle_at_center,transparent_40%,#050505_100%)]"></div>
     </section>
   );
 };
